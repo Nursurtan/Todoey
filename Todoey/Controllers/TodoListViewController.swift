@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Ietms.plist")
-
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +21,7 @@ class TodoListViewController: UITableViewController {
         
         print(dataFilePath)
          
-        loadItems()
+       // loadItems()
         
         
     }
@@ -48,7 +49,7 @@ class TodoListViewController: UITableViewController {
         return cell
     }
     
-    // Mark - TableView Delegate Methods
+    // MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
@@ -60,7 +61,7 @@ class TodoListViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    // Mark - Add new Items
+    // MARK: - Add new Items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -71,9 +72,10 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             // what will happen once the user clicks the Add Item button on our UIAlert
             
-            let newItem = Item()
-            newItem.title = textField.text!
             
+            let newItem = Item(context: self.context)
+            newItem.title = textField.text!
+            newItem.done = false
             self.itemArray.append(newItem)
                         
             self.saveItems()
@@ -93,30 +95,28 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    // Mark - Model Manupulation Methods
+    // MARK: - Model Manupulation Methods
     
     func saveItems() {
-        let encoder = PropertyListEncoder()
         
         do {
-            let data =  try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array, \(error)")
+          print("Erroor saving context \(error)")
         }
         self.tableView.reloadData()
     }
     
-    func loadItems() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-            itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
-        }
-    }
+//    func loadItems() {
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder()
+//            do {
+//            itemArray = try decoder.decode([Item].self, from: data)
+//            } catch {
+//                print("Error decoding item array, \(error)")
+//            }
+//        }
+//    }
     
     
     

@@ -23,17 +23,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    
 
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-       
+//    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+//
+//    }
+//
+    func applicationWillTerminate(_ application: UIApplication) {
+        saveContext()
     }
 
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
       
-        let container = NSPersistentContainer(name: "")
+        let container = NSPersistentContainer(name: "DataModel")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                

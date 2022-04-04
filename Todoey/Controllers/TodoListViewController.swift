@@ -20,7 +20,6 @@ class TodoListViewController: UITableViewController {
         }
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,7 +34,6 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
@@ -58,12 +56,23 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write{
+                    item.done = !item.done
+                }
+            } catch {
+                print("Error saving done status, \(error)")
+            }
+        
+        }
+        
+        tableView.reloadData()
+        
         //        context.delete(itemArray[indexPath.row])
         //        itemArray.remove(at: indexPath.row)
         
-        
-        
-        //        todoItems?[indexPath.row].done = !todoItems[indexPath.row].done
+                //        todoItems?[indexPath.row].done = !todoItems[indexPath.row].done
         //
         //        saveItems()
         
@@ -80,7 +89,6 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             // what will happen once the user clicks the Add Item button on our UIAlert
-            
             
             if let currentCategory = self.selectedCategory {
                 do {
@@ -104,8 +112,6 @@ class TodoListViewController: UITableViewController {
             
         }
         
-        
-        
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
@@ -113,15 +119,12 @@ class TodoListViewController: UITableViewController {
     
     // MARK: - Model Manupulation Methods
     
-    
-    
     func loadItems() {
         
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         
         tableView.reloadData()
     }
-    
     
 }
 

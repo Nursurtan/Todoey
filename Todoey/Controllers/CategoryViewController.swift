@@ -13,13 +13,10 @@ class CategoryViewController: UITableViewController {
     
     let realm = try! Realm()
     
-    
     var categories: Results<Category>?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         loadCategories()
         
@@ -55,7 +52,6 @@ class CategoryViewController: UITableViewController {
         }
         
     }
-    
     
     //MARK: - Data Manipulation Methods
     
@@ -101,7 +97,6 @@ class CategoryViewController: UITableViewController {
             textField = field
             textField.placeholder = "Add a new category"
            
-            
         }
         
         present(alert, animated: true, completion: nil)
@@ -109,9 +104,6 @@ class CategoryViewController: UITableViewController {
     }
   
  
-
-
-
 }
 
 

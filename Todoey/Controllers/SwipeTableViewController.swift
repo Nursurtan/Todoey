@@ -37,7 +37,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             
             self.updateModel(at: indexPath)
             
-         
+            
         }
         
         // customize the action appearance

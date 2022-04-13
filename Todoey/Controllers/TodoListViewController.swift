@@ -64,11 +64,11 @@ class TodoListViewController: SwipeTableViewController {
             } catch {
                 print("Error saving done status, \(error)")
             }
-        
+            
         }
         
         tableView.reloadData()
-  
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -97,7 +97,7 @@ class TodoListViewController: SwipeTableViewController {
             }
             
             self.tableView.reloadData()
-   
+            
         }
         
         alert.addTextField { (alertTextField) in
@@ -123,9 +123,9 @@ class TodoListViewController: SwipeTableViewController {
     override func updateModel(at indexPath: IndexPath) {
         if let item = todoItems?[indexPath.row] {
             do {
-            try realm.write{
-                realm.delete(item)
-            }
+                try realm.write{
+                    realm.delete(item)
+                }
             } catch {
                 print("Error deleting Item, \(error)")
             }
@@ -133,31 +133,31 @@ class TodoListViewController: SwipeTableViewController {
     }
 }
 
-    //MARK: - Search bar methods
+//MARK: - Search bar methods
 
 extension TodoListViewController: UISearchBarDelegate {
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
         
         tableView.reloadData()
-
+        
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
-
+            
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
-
-
+            
+            
         }
-
-
+        
+        
     }
-
-
+    
+    
 }
